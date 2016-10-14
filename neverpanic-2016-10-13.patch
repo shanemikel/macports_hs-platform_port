@@ -1,0 +1,1557 @@
+Index: _resources/port1.0/group/haskell-1.0.tcl
+===================================================================
+--- _resources/port1.0/group/haskell-1.0.tcl	(revision 153494)
++++ _resources/port1.0/group/haskell-1.0.tcl	(working copy)
+@@ -53,7 +53,7 @@
+ # updates.
+ array set haskell.compiler_configuration {
+     ghc {port       ghc
+-         version    7.8.3
++         version    8.0.1
+          compiler   ${prefix}/bin/ghc
+          ghc-pkg    ${prefix}/bin/ghc-pkg}
+ }
+Index: devel/haskell-platform/Portfile
+===================================================================
+--- devel/haskell-platform/Portfile	(revision 153494)
++++ devel/haskell-platform/Portfile	(working copy)
+@@ -6,7 +6,7 @@
+ name            haskell-platform
+ 
+ if {$subport == $name} {
+-    version         2014.2.0.0
++    version         8.0.1
+     categories      devel haskell
+     maintainers     cal openmaintainer
+     description     \
+@@ -118,9 +118,9 @@
+ # Additional Platform Libraries #
+ #################################
+ 
+-haskell_platform_port async 2.0.1.5 1 {
+-    checksums               rmd160  0ec360bc373c4ca0b3c7617ec611f2414804e9cd \
+-                            sha256  cd13ac558f4f63e567100805770648e89307a3210852b17038c9be4fcc3aa83c
++haskell_platform_port async 2.1.0 0 {
++    checksums               rmd160  6b82f7ecc2b76b795b3a75860f741556b977e830 \
++                            sha256  93c37611f9c68b5cdc8cd9960ae77a7fbc25da83cae90137ef1378d857f22c2f
+ 
+     depends_lib-append      port:hs-stm
+ 
+@@ -138,11 +138,12 @@
+         automatically killed when their parent dies (see withAsync).
+ }
+ 
+-haskell_platform_port attoparsec 0.10.4.0 4 {
+-    checksums               rmd160  1fc9845e60fb0cddc9ffa8838c446b3046cd3522 \
+-                            sha256  b6b84e0dbd1c3beec1dedea578ac2f4d62afbe66b383582b7b3349406866d346
++haskell_platform_port attoparsec 0.13.0.2 0 {
++    checksums               rmd160  93333785e4716309332b659d2b789cac4bbf7d48 \
++                            sha256  69f7f381f644ba4a6f348bbff9b2b4280b7b602e8e25e59eadb6e30ad5f2ec6a
+ 
+-    depends_lib-append      port:hs-text
++    depends_lib-append      port:hs-text \
++                            port:hs-scientific
+ 
+     description             Fast combinator parsing for bytestrings and text
+     long_description        \
+@@ -151,9 +152,9 @@
+         formats.
+ }
+ 
+-haskell_platform_port case-insensitive 1.1.0.3 1 {
+-    checksums               rmd160  351ebf0ae84c4c580b910dbd3ed0828b309874c7 \
+-                            sha256  7b255fe63155d53ab84b248ab5ba9306fd4bec47a6198e3275cf9cb41c4d263b
++haskell_platform_port case-insensitive 1.2.0.6 0 {
++    checksums               rmd160  bc4b78cc1c8e812ea243453f26e0bb4697d68d96 \
++                            sha256  bc7b53517fefc475311bfe6dbab8ade47ab8df11a59079653aa3271e9ffcb1c4
+ 
+     depends_lib-append      port:hs-hashable \
+                             port:hs-text
+@@ -166,9 +167,9 @@
+         insensitive to cases.
+ }
+ 
+-haskell_platform_port fgl 5.5.0.1 1 {
+-    checksums               rmd160  c6c1f89db51d8d3ce6687dab13109c7f40c9c10c \
+-                            sha256  aa61664ba38db3e54124b702b1ee92a72a569c981b759e48cfb567078b038763
++haskell_platform_port fgl 5.5.2.3 0 {
++    checksums               rmd160  8371f511eadac788974737f0fad7ec157eadc4b3 \
++                            sha256  f4113b5221917feb6389494bf8b7b6221ee00f322b6c25fc25a25795549f9e20
+ 
+     depends_lib-append      port:hs-mtl
+ 
+@@ -176,21 +177,17 @@
+     long_description        ${description}
+ }
+ 
+-haskell_platform_port GLUT 2.5.1.1 1 {
+-    checksums               rmd160  b6e4bad4109307a614c3ba93aa1f3f8857ae45dc \
+-                            sha256  4a8177e154ead5a7bcc110f8fe408f9cf720783dde024ac1936cd95b659b2d59
+-
+-    depends_lib-append      port:hs-opengl
++haskell_platform_port fixed 0.2.1.1 0 {
++    checksums               rmd160  0efb4f13fc43f916ffa50247902af6f12010e71e \
++                            sha256  24a9e1e251998c9d06037bb771d9eab2980a91132de59a19d0166a1c51e715e2
+ 
+-    description             A binding for the OpenGL Utility Toolkit
+-    long_description        \
+-        A Haskell binding for the OpenGL Utility Toolkit, a window system \
+-        independent toolkit for writing OpenGL programs.
++    description             Signed 15.16 precision fixed point arithmetic
++    long_description        ${description}
+ }
+ 
+-haskell_platform_port GLURaw 1.4.0.1 1 {
+-    checksums               rmd160  1fa7a906c6f99d9540b200de038a2a734e576cea \
+-                            sha256  9655644beb54ff8fac68f2e0fd8a8e9a1e8409272e2e4c963ccce9bcd60e0ecc
++haskell_platform_port GLURaw 2.0.0.1 0 {
++    checksums               rmd160  309220ac689d5576e99be29bd2a54c2affae730a \
++                            sha256  d561b2e170e6048f7f1b18647fa569f28684291e25924b41f169ecfdc281ab40
+ 
+     depends_lib-append      port:hs-openglraw
+ 
+@@ -201,9 +198,29 @@
+         a nicer interface.
+ }
+ 
+-haskell_platform_port hashable 1.2.2.0 1 {
+-    checksums               rmd160  33f9040f2afcb93d6475d8872aef4c164a4cff5e \
+-                            sha256  033a90b0369af59bf922d0c2af8d73a18432b46b0a47607f436d38f873a88e21
++haskell_platform_port GLUT 2.7.0.7 0 {
++    checksums               rmd160  cff3ad049dbb6b49738b27833ce9217abafa9ca0 \
++                            sha256  3a9f292f6a417c90f39065c7e0d441798b99276ccdd1c0f3feff50955b937c93
++
++    depends_lib-append      port:hs-opengl
++
++    description             A binding for the OpenGL Utility Toolkit
++    long_description        \
++        A Haskell binding for the OpenGL Utility Toolkit, a window system \
++        independent toolkit for writing OpenGL programs.
++}
++
++haskell_platform_port half 0.2.2.3 0 {
++    checksums               rmd160  25b4611e534af7fdbbf65fd5e4e1af69e2065048 \
++                            sha256  85c244c80d1c889a3d79073a6f5a99d9e769dbe3c574ca11d992b2b4f7599a5c
++
++    description             Half-precision floating-point
++    long_description        ${description}
++}
++
++haskell_platform_port hashable 1.2.4.0 0 {
++    checksums               rmd160  cfca5318aa0394cb4573b39f0b42e067c1b6e9a8 \
++                            sha256  fb9671db0c39cd48d38e2e13e3352e2bf7dfa6341edfe68789a1753d21bb3cf3
+ 
+     depends_lib-append      port:hs-text
+ 
+@@ -215,10 +232,11 @@
+         a way to combine hash values.
+ }
+ 
+-haskell_platform_port haskell-src 1.0.1.6 1 {
+-    checksums               rmd160  649a0f9f116cb90f03411a9e8d53b17409c38134 \
+-                            sha256  c7c556366025d9895d1110ecfa30a29e29d7d0a8cb447716fe601e4ff5da4cef
++haskell_platform_port haskell-src 1.0.2.0 0 {
++    checksums               rmd160  d948608604247fd77a3fa4b3041e9da89ced36f6 \
++                            sha256  2a25ee5729230edddb94af8d9881efbc1d8798bd316097f4646749cb2fa491a6
+ 
++    depends_build-append    port:hs-happy
+     depends_lib-append      port:hs-syb
+ 
+     description             Support for manipulating Haskell source code
+@@ -229,7 +247,7 @@
+         of this package are to parse or generate Haskell 98 code.
+ }
+ 
+-haskell_platform_port html 1.0.1.2 6 {
++haskell_platform_port html 1.0.1.2 7 {
+     checksums               rmd160  55d95a42c297c9c4b0b0c3bbd077a5ed59e48878 \
+                             sha256  0c35495ea33d65e69c69bc7441ec8e1af69fbb43433c2aa3406c0a13a3ab3061
+ 
+@@ -238,13 +256,13 @@
+         This package contains a combinator library for constructing HTML documents.
+ }
+ 
+-haskell_platform_port HTTP 4000.2.10 1 {
+-    checksums               rmd160  b1e3a1aec27c3e09fe1f93f93ab717cc4e576504 \
+-                            sha256  efde6d9f2e8cd7b72068579f0a75449703c0fa7aee76dfc0f3af175295a127d1
++haskell_platform_port HTTP 4000.3.3 0 {
++    checksums               rmd160  cb0c32394df7986a4b91534ccf3026a07c3d59c4 \
++                            sha256  bbada3c2088dc1384234cdbc1bb6089ea588da068a6a38878ea259dd19de9bf2
+ 
+     depends_lib-append      port:hs-network \
+-                            port:hs-mtl \
+-                            port:hs-parsec
++                            port:hs-network-uri \
++                            port:hs-mtl
+ 
+     description             A library for client-side HTTP
+     long_description        \
+@@ -255,9 +273,9 @@
+         the implementation is all written in Haskell.
+ }
+ 
+-haskell_platform_port HUnit 1.2.5.2 3 {
+-    checksums               rmd160  f6ac9ac12c152609174ea80a3a0c694210c81594 \
+-                            sha256  0af5ad34dba27de48b94ce6d5f7ee3aa6af6183bdc4a3967b811e28520369a41
++haskell_platform_port HUnit 1.3.1.1 0 {
++    checksums               rmd160  0198586d9234183b90f82dbce709f9355875ad2e \
++                            sha256  93e5fc4290ab685b469209f04d9858338ffff486e15c23a11260c47e32da8ef8
+ 
+     description             A unit testing framework for Haskell
+     long_description        \
+@@ -265,9 +283,12 @@
+         tool for Java, see: http://www.junit.org.
+ }
+ 
+-haskell_platform_port mtl 2.1.3.1 1 {
+-    checksums               rmd160  f6432fb7e64d66eff69f02ccca9fc30ac5dce502 \
+-                            sha256  77af766957fb49361fe63446f272a698bddb13398669edc363022e5c2517f6f6
++haskell_platform_port mtl 2.2.1 0 {
++    patch.pre_args          -p1
++    patchfiles              59498406a6338d93891dec3abcbdde2cb7e41325.patch
++
++    checksums               rmd160  61f2af56029c85c40a66a04cbd8ff1b97e0f90d9 \
++                            sha256  cae59d79f3a16f8e9f3c9adc1010c7c6cdddc73e8a97ff4305f6439d855c8dc5
+ 
+     description             Monad classes, using functional dependencies
+     long_description        \
+@@ -277,9 +298,9 @@
+         School of Functional Programming, 1995
+ }
+ 
+-haskell_platform_port network 2.4.2.3 1 {
+-    checksums               rmd160  38f20be22e51a902a00416bad1e63480316e8348 \
+-                            sha256  801b9c652dae626bf4a96175162b1290e7fe7ff20d802d62434d5ae1d363c16d
++haskell_platform_port network 2.6.2.1 0 {
++    checksums               rmd160  3bcc893f68ca44f71cffedd95464ad0217b451c2 \
++                            sha256  a3fda15c9bbe2c7274d97f40398c6cf8d1d3a9fe896fbf6531e1bfc849bb1bfa
+ 
+     depends_lib-append      port:hs-parsec
+ 
+@@ -287,12 +308,36 @@
+     long_description        ${description}
+ }
+ 
+-haskell_platform_port OpenGL 2.9.2.0 1 {
+-    checksums               rmd160  b238630bd16d37485c58835a643d965ac6c61ef2 \
+-                            sha256  1758f6cacc9ea8f0d410fd0abc1a19f2a50dffdb62736d66d4e62b20619545e9
++haskell_platform_port network-uri 2.6.1.0 0 {
++    checksums               rmd160  591880177d5a19fad3a62c5b61af3e9e33cea94f \
++                            sha256  423e0a2351236f3fcfd24e39cdbc38050ec2910f82245e69ca72a661f7fc47f0
++
++    depends_lib-append      port:hs-parsec
++
++    description             URI manipulation
++    long_description        \
++        This package provides an URI manipulation interface.
++}
++
++haskell_platform_port ObjectName 1.1.0.1 0 {
++    checksums               rmd160  53d05e3d9dc597b41f152288ae9b0754f4067b8d \
++                            sha256  72dbef237580fd4e8567de2de752835bbadd3629f486d1586486d49a49aad210
++
++    description             Explicitly handled object names
++    long_description        \
++        This tiny package contains the class ObjectName, which corresponds to \
++        the general notion of explicitly handled identifiers for API objects, \
++        e.g. a texture object name in OpenGL or a buffer object name in OpenAL.
++}
++
++haskell_platform_port OpenGL 3.0.0.2 0 {
++    checksums               rmd160  ed26ed24240cd8ecca1ba7d0c2e8eb5800146475 \
++                            sha256  13ee4a24d7caad61d3b63146be6620b523bde5b79f223c291f9f25ae9fd9681a
+ 
+     depends_lib-append      port:hs-gluraw \
++                            port:hs-objectname \
+                             port:hs-openglraw \
++                            port:hs-statevar \
+                             port:hs-text
+ 
+     description             A binding for the OpenGL graphics system
+@@ -301,9 +346,13 @@
+         its accompanying utility library (GLU, version 1.3).
+ }
+ 
+-haskell_platform_port OpenGLRaw 1.5.0.0 1 {
+-    checksums               rmd160  6ede61cb59090ede7d3ec1df41311a8e14496080 \
+-                            sha256  852aa5229722269d70daed3c04b95e9dc7b7013efd62ebc4f2873a81768b9a12
++haskell_platform_port OpenGLRaw 3.1.0.0 0 {
++    checksums               rmd160  a975c57257dc9302d95a62a9bd95e266af7164ad \
++                            sha256  414364cacce1c7601c93b388dbb73c5bdc76e5b0f3754ee61d0a5b94ccf9f3ce
++
++    depends_lib-append      port:hs-fixed \
++                            port:hs-half \
++                            port:hs-text
+ 
+     description             A raw binding for the OpenGL graphics system
+     long_description        \
+@@ -319,17 +368,17 @@
+         thrown.
+ }
+ 
+-haskell_platform_port parallel 3.2.0.4 1 {
+-    checksums               rmd160  4bc31de0b3dd63ca8d24c967f32a2ee40f0a2d64 \
+-                            sha256  8cdb637fc04e4dd62f9deb0fe3c191b8068526009960f297f54dc9cf5616146d
++haskell_platform_port parallel 3.2.1.0 0 {
++    checksums               rmd160  1401fc3ec776251484ca3238301785fc746c7387 \
++                            sha256  4de3cdbb71dfd13cbb70a1dc1d1d5cf34fbe9828e05eb02b3dc658fdc2148526
+ 
+     description             Parallel programming library
+     long_description        This package provides a library for parallel programming.
+ }
+ 
+-haskell_platform_port parsec 3.1.5 1 {
+-    checksums               rmd160  4d27dffd266c38cc3266ea17b792e00f180b3968 \
+-                            sha256  c572245d72bc3aff3491ce4f89215fcaa1e01c5e7b280d4c105a87db31793cb8
++haskell_platform_port parsec 3.1.9 0 {
++    checksums               rmd160  366255e648b0b9e20a555e942c71f53014a5a513 \
++                            sha256  71f711d24c89581a43b8bc2d3ed56a1a802bbf1cd0b083bc34636c232b0342c9
+ 
+     depends_lib-append      port:hs-mtl \
+                             port:hs-text
+@@ -343,19 +392,26 @@
+         monads, and it is also parametric in the input stream type.
+ }
+ 
+-haskell_platform_port primitive 0.5.2.1 1 {
+-    checksums               rmd160  b456047baa641acc897a871cc2212f9f3a2c576f \
+-                            sha256  0e516b81c2ef2c96d47dc40561663cc2cbfece0f135948e77e9b53025ff1c3ee
++haskell_platform_port primitive 0.6.1.0 0 {
++    patch.pre_args          -p1
++    patchfiles              0359ea15842d4e6bef27c0d621964507e4bfd219.patch \
++                            83d3d23d2fa1583ecd1b59464cc889924e1b5fff.patch \
++                            1af89788d5c9ab7a0a93ff6764e1770e6c80d957.patch
++
++    checksums               rmd160  001324da6b15c9220304ab23d0cba166fa3e19d9 \
++                            sha256  93731fa72eaf74e8e83453f080828e18cec9fbc82bee91b49ba8b61c043d38c8
+ 
+     description             Primitive memory-related operations
+     long_description        This package provides various primitive memory-related operations.
+ }
+ 
+-haskell_platform_port QuickCheck 2.6 3 {
+-    checksums               rmd160  94bab2dcefdd7a6eddd5af7211db1babf39e0df8 \
+-                            sha256  8001c00a1892714d914e5007ba72cdd428c1ea4c6b8418c6cb5e7809753d970d
++haskell_platform_port QuickCheck 2.8.2 0 {
++    checksums               rmd160  d6aefde8860096ec06d66bbe1f2c451229aedb6b \
++                            sha256  98c64de1e2dbf801c54dcdcb8ddc33b3569e0da38b39d711ee6ac505769926aa
++
++    depends_lib-append      port:hs-tf-random
+ 
+-    depends_lib-append      port:hs-random
++    configure.args-append   -f base4point8
+ 
+     description             Automatic testing of Haskell programs
+     long_description        \
+@@ -365,9 +421,9 @@
+         that the properties hold in a large number of randomly generated cases.
+ }
+ 
+-haskell_platform_port random 1.0.1.1 5 {
+-    checksums               rmd160  a13a4d7fefd15611cf863f11caf212efede320c3 \
+-                            sha256  df7c3b405de0ac27a2ee8fdc8dad87cb42e8eac01fef53861e43bc47c8111559
++haskell_platform_port random 1.1 0 {
++    checksums               rmd160  483867e6a218fd5aee0ed5156c81b90169de9fd1 \
++                            sha256  b718a41057e25a3a71df693ab0fe2263d492e759679b3c2fea6ea33b171d3a5a
+ 
+     description             random number library
+     long_description        \
+@@ -375,7 +431,7 @@
+         the ability to split random number generators.
+ }
+ 
+-haskell_platform_port regex-base 0.93.2 5 {
++haskell_platform_port regex-base 0.93.2 6 {
+     checksums               rmd160  c009e193dd453666c7c3b585a25f3a8add7ec6b6 \
+                             sha256  20dc5713a16f3d5e2e6d056b4beb9cfdc4368cd09fd56f47414c847705243278
+ 
+@@ -385,7 +441,7 @@
+     long_description        Interface API for regex-posix,pcre,parsec,tdfa,dfa
+ }
+ 
+-haskell_platform_port regex-compat 0.95.1 5 {
++haskell_platform_port regex-compat 0.95.1 6 {
+     checksums               rmd160  b2fe02ca3c4e9027b2d433c8a265b19a85c8bd17 \
+                             sha256  d57cb1a5a4d66753b18eaa37a1621246f660472243b001894f970037548d953b
+ 
+@@ -396,7 +452,7 @@
+     long_description        One module layer over regex-posix to replace Text.Regex
+ }
+ 
+-haskell_platform_port regex-posix 0.95.2 4 {
++haskell_platform_port regex-posix 0.95.2 5 {
+     checksums               rmd160  7ee59eb760bb8c0c7fe17e17d90eb0623b9fd5bb \
+                             sha256  56019921cd4a4c9682b81ec614236fea816ba8ed8785a1640cd66d8b24fc703e
+ 
+@@ -406,9 +462,24 @@
+     long_description        The posix regex backend for regex-base
+ }
+ 
+-haskell_platform_port split 0.2.2 3 {
+-    checksums               rmd160  7d4fe221283836386807f0e73a90df1255061f6f \
+-                            sha256  f9cf9e571357f227aed5be9a78f5bbf78ef55c99df2edf7fdc659acc1f904375
++haskell_platform_port scientific 0.3.4.6 0 {
++    checksums               rmd160  4bfb75065ac6f4bd08a57fbc5b0b57740bd475f9 \
++                            sha256  bdd15c72b379ceaef5f30d7113e6971a47090a285f46d1d44528e328061df382
++
++    depends_lib-append      port:hs-hashable \
++                            port:hs-text \
++                            port:hs-vector
++
++    description             Numbers represented using scientific notation
++    long_description        \
++        Data.Scientific provides the number type Scientific. Scientific numbers \
++        are arbitrary precision and space efficient. They are represented using \
++        scientific notation.
++}
++
++haskell_platform_port split 0.2.3 0 {
++    checksums               rmd160  07ecb46e17402354b59df4c0dd27e1d1d3215314 \
++                            sha256  a6d100e433fa27eda72127475ba9c55481ca4105cfbb6ff55b67023d00ccead9
+ 
+     description             Combinator library for splitting lists.
+     long_description        \
+@@ -416,17 +487,29 @@
+         the "split" function found in several mainstream languages.
+ }
+ 
+-haskell_platform_port stm 2.4.2 3 {
+-    checksums               rmd160  7d49257f7e2de7cf18e02dc3ceeb4619d7980dd8 \
+-                            sha256  c8ee3cd64c266133902619cfff2d04e5f66206f91dbce8dd1182037fbe4858db
++haskell_platform_port StateVar 1.1.0.4 0 {
++    checksums               rmd160  2ebc45624d7c7559dd95b92c14771da7967818ad \
++                            sha256  7ad68decb5c9a76f83c95ece5fa13d1b053e4fb1079bd2d3538f6b05014dffb7
++
++    depends_lib-append      port:hs-stm
++
++    description             State variables
++    long_description        \
++        This package contains state variables, which are references in the IO \
++        monad, like IORefs or parts of the OpenGL state.
++}
++
++haskell_platform_port stm 2.4.4.1 0 {
++    checksums               rmd160  cf2d08df7a1d7b05ae793a28c548a7014f595cd1 \
++                            sha256  8f999095ed8d50d2056fc6e185035ee8166c50751e1af8de02ac38d382bf3384
+ 
+     description             Software Transactional Memory
+     long_description        A modular composable concurrency abstraction.
+ }
+ 
+-haskell_platform_port syb 0.4.1 1 {
+-    checksums               rmd160  4ed2329f3c915adb91fb5b1f6b3735e219d1fdd6 \
+-                            sha256  aa32cb3d9a0cbcfb24ac1c5d567886e8908dd017fd009ffd446bff86732670d2
++haskell_platform_port syb 0.6 0 {
++    checksums               rmd160  b482c5236cdca6ef315fed2830c6937e8a9890b7 \
++                            sha256  a38d1f7e6a40e2c990fec85215c45063a508bf73df98a4483ec78c5025b66cdc
+ 
+     description             Scrap Your Boilerplate
+     long_description        \
+@@ -438,9 +521,9 @@
+         a variety of traversals.
+ }
+ 
+-haskell_platform_port text 1.1.0.0 1 {
+-    checksums               rmd160  b57efc9cbf277cd914a9e148129e42ae861771b8 \
+-                            sha256  80f1ada824f0e3886bb49dc7fd128707ca1a34e06bbf4419873b1677c4d7ba92
++haskell_platform_port text 1.2.2.1 0 {
++    checksums               rmd160  e45ea659385824258fffd634b7c141e567885d6e \
++                            sha256  1addb1bdf36293c996653c9a0a320b5491714495862d997a23fb1ecd41ff395b
+ 
+     description             An efficient packed Unicode text type
+     long_description        \
+@@ -448,9 +531,26 @@
+         with a powerful loop fusion optimization framework.
+ }
+ 
+-haskell_platform_port unordered-containers 0.2.4.0 1 {
+-    checksums               rmd160  0d62b6b8f95e65890e07934413cd1377ed1e85e5 \
+-                            sha256  34eaeb0c96d84169aca7085cf21f89bedb4bdb4de2ac78358a087faeea93cdf4
++haskell_platform_port tf-random 0.5 1 {
++    checksums               rmd160  bd58a02f7e68c4fd4e51591fa4ddad93d416d717 \
++                            sha256  2e30cec027b313c9e1794d326635d8fc5f79b6bf6e7580ab4b00186dadc88510
++
++    depends_lib-append      port:hs-primitive \
++                            port:hs-random
++
++    description             High-quality splittable pseudorandom number generator
++    long_description        \
++        This package contains an implementation of a high-quality splittable \
++        pseudorandom number generator. The generator is based on \
++        a cryptographic hash function built on top of the ThreeFish block \
++        cipher. See the paper Splittable Pseudorandom Number Generators Using \
++        Cryptographic Hashing by Claessen, Pałka for details and the rationale \
++        of the design.
++}
++
++haskell_platform_port unordered-containers 0.2.7.0 0 {
++    checksums               rmd160  2458771be54ad1e26c499933585df2c927d9f3d6 \
++                            sha256  6503226d24069698bbb454c15c53a7f9f245aba228e142c6b6ab2d31cecc5ef6
+ 
+     depends_lib-append      port:hs-hashable
+ 
+@@ -461,9 +561,13 @@
+         quantities and high speed.
+ }
+ 
+-haskell_platform_port vector 0.10.9.1 1 {
+-    checksums               rmd160  885ba057a05219ae6a35170539c68996d2074668 \
+-                            sha256  205656e9741aad406e427e988dbf1665bf5dbdf3e9d574e309c274be4e06bde5
++haskell_platform_port vector 0.11.0.0 0 {
++    patch.pre_args          -p1
++    patchfiles              552ff11c2bd905faff53b2e34900cbbbf59955c8.patch \
++                            6c17dd6fadc5e7e3e09f7892380ce1339f296efd.patch
++
++    checksums               rmd160  7d4b4839385bcfed622b9be1d40801b7b33f03b2 \
++                            sha256  0a5320ed44c3f2b04b7f61e0f63f4fcd5b337524e601e01d5813ace3f5a432e4
+ 
+     depends_lib-append      port:hs-primitive
+ 
+@@ -473,9 +577,9 @@
+         immutable), with a powerful loop optimisation framework.
+ }
+ 
+-haskell_platform_port zlib 0.5.4.1 4 {
+-    checksums               rmd160  9ed49e79e239604958a9c385cca75747fafc2713 \
+-                            sha256  cca365e4c52c90be41a5754943134da5ce6c60bb52fa00c128fd118e0505a550
++haskell_platform_port zlib 0.6.1.1 0 {
++    checksums               rmd160  244614e96ea44529025f5343a768bd8317adbd48 \
++                            sha256  c5f5b4285473657a7997d74f7642f3e7bda40f92c3c5d49471a899e27a4ba735
+ 
+     depends_lib-append      port:zlib
+ 
+@@ -491,15 +595,21 @@
+ # Programs and Tools #
+ ######################
+ 
+-haskell_platform_tool cabal-install 1.18.0.5 1 {
+-    checksums               rmd160  f07279510e03678ad5e3720d9e01707681f874ea \
+-                            sha256  477df8ef73916e8bc23c727280a1700939131a3e2809a057668c883b0b521782
+-
+-    depends_lib-append      port:hs-http \
++haskell_platform_tool cabal-install 1.24.0.0 0 {
++    checksums               rmd160  8cb6a107efc71d68783e8c41e54498a257059b3c \
++                            sha256  d840ecfd0a95a96e956b57fb2f3e9c81d9fc160e1fd0ea350b0d37d169d9e87e
++
++    depends_lib-append      \
++                            port:hs-async \
++                            port:hs-cryptohash-sha256 \
++                            port:hs-hackage-security \
++                            port:hs-hashable \
++                            port:hs-http \
+                             port:hs-mtl \
+                             port:hs-network \
+                             port:hs-random \
+                             port:hs-stm \
++                            port:hs-tar \
+                             port:hs-zlib
+ 
+     description             The command-line interface for Cabal and Hackage
+@@ -509,9 +619,9 @@
+         installation of Haskell libraries and programs.
+ }
+ 
+-haskell_platform_tool alex 3.1.3 1 {
+-    checksums               rmd160  2325ccfc770264c517d2dfa38cece9376d4e252d \
+-                            sha256  8d41a6e72a016155f00c846f7146ab4b27fe9640668a4b592d6a9b856f970a92
++haskell_platform_tool alex 3.1.7 0 {
++    checksums               rmd160  f96a1970e649c5928c8e4450517fa721e8059e10 \
++                            sha256  89a1a13da6ccbeb006488d9574382e891cf7c0567752b330cc8616d748bf28d1
+ 
+     depends_lib-append      port:hs-quickcheck
+ 
+@@ -523,9 +633,9 @@
+         similar to the tool lex or flex for C/C++.
+ }
+ 
+-haskell_platform_tool happy 1.19.4 1 {
+-    checksums               rmd160  8ec09c4743d85ae493354e49df07f0ee423267cf \
+-                            sha256  6be499f66c61f8c48cbbbcb70515eb8e62c2bfa08adcc8c9474e7ae343a6936d
++haskell_platform_tool happy 1.19.5 0 {
++    checksums               rmd160  31895a6e6bcf1eeae2e5949cc5ca49d84094ae89 \
++                            sha256  62f03ac11d7b4b9913f212f5aa2eee1087f3b46dc07d799d41e1854ff02843da
+ 
+     depends_lib-append      port:hs-mtl
+     description             A parser generator for Haskell
+@@ -535,9 +645,9 @@
+         in a similar way to the yacc tool for C.
+ }
+ 
+-haskell_platform_tool hscolour 1.20.3 1 {
+-    checksums               rmd160  2d875ecdb910a5955a5ec049935a74c60edbc4cc \
+-                            sha256  3adb816fba3ecdf9f1ee5fb23feb0611b0762f7e8c2a282c2def5cc2f5483d96
++haskell_platform_tool hscolour 1.24 0 {
++    checksums               rmd160  3e12fdf8b9148c1d591d5e55805d3a62602c6de8 \
++                            sha256  54bc45137ba06bd876cf98424f974e325e9b236bd5c18d1c5b2ea0351b1d9332
+ 
+     license                 GPL-2+
+ 
+@@ -549,3 +659,75 @@
+         HTML 4.01 with CSS and mouseover annotations, XHTML 1.0 with inline CSS \
+         styling, LaTeX, and mIRC chat codes.
+ }
++
++haskell_platform_tool stack 1.1.2 0 {
++    checksums               rmd160  7024e4802abdc6dbb318807d4e15b4fa1a56788b \
++                            sha256  fc836b24fdeac54244fc79b6775d5edee146b7e552ad8e69596c7cc2f2b10625
++
++    depends_lib-append      \
++        aeson >=0.8.0.2 && <0.10 || ==0.11.*,
++		ansi-terminal >=0.6.2.3 && <0.7,
++		base-compat >=0.6 && <0.10,
++		binary ==0.7.*,
++		binary-tagged >=0.1.1 && <0.2,
++		blaze-builder >=0.4.0.2 && <0.5,
++		byteable >=0.1.1 && <0.2,
++		conduit >=1.2.4 && <1.3,
++		conduit-extra >=1.1.7.1 && <1.2,
++		cryptohash >=0.11.6 && <0.12,
++		cryptohash-conduit >=0.1.1 && <0.2,
++		edit-distance ==0.2.*,
++		either >=4.4.1.1 && <4.5,
++		enclosed-exceptions >=1.0.1.1 && <1.1,
++		errors >=2.1.2 && <2.2,
++		exceptions >=0.8.0.2 && <0.9,
++		extra >=1.4.6 && <1.5,
++		fast-logger >=2.3.1 && <2.5,
++		filelock >=0.1.0.1 && <0.2,
++		fsnotify >=0.2.1 && <0.3,
++		generic-deriving >=1.9.0 && <1.10,
++		hastache >=0.6.1 && <0.7,
++		hit >=0.6.3 && <0.7,
++		hpack >=0.14.0 && <0.15,
++		http-client >=0.4.28 && <0.5,
++		http-client-tls >=0.2.2 && <0.3,
++		http-conduit >=2.1.7 && <2.2,
++		http-types >=0.8.6 && <0.10,
++		lifted-base >=0.2.3.6 && <0.3,
++		microlens >=0.3.0.0 && <0.5,
++		monad-control >=1.0.1.0 && <1.1,
++		monad-logger >=0.3.13.1 && <0.4,
++		monad-unlift >=0.1.2.0 && <0.2,
++		open-browser >=0.2.1 && <0.3,
++		optparse-applicative >=0.11.0.2 && <0.13,
++		path >=0.5.7 && <0.6,
++		path-io >=1.1.0 && <2.0.0,
++		persistent >=2.1.2 && <2.6,
++		persistent-sqlite >=2.1.4 && <2.6,
++		persistent-template >=2.1.1 && <2.6,
++		process >=1.2.0.0 && <1.3,
++		project-template ==0.2.*,
++		regex-applicative-text >=0.1.0.1 && <0.2,
++		resourcet >=1.1.4.1 && <1.2,
++		retry >=0.6 && <0.8,
++		safe ==0.3.*,
++		semigroups >=0.5 && <0.19,
++		split >=0.2.3.1 && <0.3,
++		streaming-commons >=0.1.10.0 && <0.2,
++		template-haskell >=2.9.0.0 && <2.11,
++		temporary >=1.2.0.3 && <1.3,
++		text-binary >=0.2.1 && <0.3,
++		time >=1.4.2 && <1.6,
++		tls >=1.3.8 && <1.4,
++		transformers >=0.4.2.0 && <0.5,
++		transformers-base >=0.4.4 && <0.5,
++		unix-compat >=0.4.1.4 && <0.5,
++		vector-binary-instances >=0.2.3.2 && <0.3,
++		yaml >=0.8.10.1 && <0.9,
++		zip-archive >=0.2.3.7 && <0.3
++
++    description             The Haskell Tool Stack
++    long_description        \
++        Stack is a cross-platform program for developing Haskell projects. It \
++        is intended for Haskellers both new and experienced.
++}
+Index: devel/haskell-platform/files/0359ea15842d4e6bef27c0d621964507e4bfd219.patch
+===================================================================
+--- devel/haskell-platform/files/0359ea15842d4e6bef27c0d621964507e4bfd219.patch	(nonexistent)
++++ devel/haskell-platform/files/0359ea15842d4e6bef27c0d621964507e4bfd219.patch	(working copy)
+@@ -0,0 +1,23 @@
++From 0359ea15842d4e6bef27c0d621964507e4bfd219 Mon Sep 17 00:00:00 2001
++From: Herbert Valerio Riedel <hvr@gnu.org>
++Date: Sat, 31 Oct 2015 10:03:39 +0100
++Subject: [PATCH] Bump upper bound to allow base-4.9
++
++Upstream-Stauts: Backport [https://github.com/haskell/primitive/commit/0359ea15842d4e6bef27c0d621964507e4bfd219]
++---
++ primitive.cabal | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/primitive.cabal b/primitive.cabal
++index 232dccc..2f35e9e 100644
++--- a/primitive.cabal
+++++ b/primitive.cabal
++@@ -36,7 +36,7 @@ Library
++         Data.Primitive.Internal.Compat
++         Data.Primitive.Internal.Operations
++ 
++-  Build-Depends: base >= 4.3 && < 4.9
+++  Build-Depends: base >= 4.3 && < 4.10
++                , ghc-prim >= 0.2 && < 0.5
++                , transformers >= 0.2 && < 0.5
++ 
+Index: devel/haskell-platform/files/1af89788d5c9ab7a0a93ff6764e1770e6c80d957.patch
+===================================================================
+--- devel/haskell-platform/files/1af89788d5c9ab7a0a93ff6764e1770e6c80d957.patch	(nonexistent)
++++ devel/haskell-platform/files/1af89788d5c9ab7a0a93ff6764e1770e6c80d957.patch	(working copy)
+@@ -0,0 +1,23 @@
++From 1af89788d5c9ab7a0a93ff6764e1770e6c80d957 Mon Sep 17 00:00:00 2001
++From: Herbert Valerio Riedel <hvr@gnu.org>
++Date: Sun, 20 Dec 2015 23:17:37 +0100
++Subject: [PATCH] Relax upper bound to allow transformers-0.5
++
++Upstream-Status: Backport [https://github.com/haskell/primitive/commit/1af89788d5c9ab7a0a93ff6764e1770e6c80d957]
++---
++ primitive.cabal | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/primitive.cabal b/primitive.cabal
++index f034b78..982d2f4 100644
++--- a/primitive.cabal
+++++ b/primitive.cabal
++@@ -38,7 +38,7 @@ Library
++ 
++   Build-Depends: base >= 4.3 && < 4.10
++                , ghc-prim >= 0.2 && < 0.6
++-               , transformers >= 0.2 && < 0.5
+++               , transformers >= 0.2 && < 0.6
++ 
++   Ghc-Options: -O2 -Wall
++ 
+Index: devel/haskell-platform/files/552ff11c2bd905faff53b2e34900cbbbf59955c8.patch
+===================================================================
+--- devel/haskell-platform/files/552ff11c2bd905faff53b2e34900cbbbf59955c8.patch	(nonexistent)
++++ devel/haskell-platform/files/552ff11c2bd905faff53b2e34900cbbbf59955c8.patch	(working copy)
+@@ -0,0 +1,23 @@
++From 552ff11c2bd905faff53b2e34900cbbbf59955c8 Mon Sep 17 00:00:00 2001
++From: Herbert Valerio Riedel <hvr@gnu.org>
++Date: Sat, 31 Oct 2015 10:02:58 +0100
++Subject: [PATCH] Bump upper bound to allow base-4.9
++
++Upstream-Status: Backport [https://github.com/haskell/vector/commit/552ff11c2bd905faff53b2e34900cbbbf59955c8]
++---
++ vector.cabal | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/vector.cabal b/vector.cabal
++index 062fd38..3d3b0ff 100644
++--- a/vector.cabal
+++++ b/vector.cabal
++@@ -138,7 +138,7 @@ Library
++   Install-Includes:
++         vector.h
++ 
++-  Build-Depends: base >= 4.3 && < 4.9
+++  Build-Depends: base >= 4.3 && < 4.10
++                , primitive >= 0.5.0.1 && < 0.7
++                , ghc-prim >= 0.2 && < 0.5
++                , deepseq >= 1.1 && < 1.5
+Index: devel/haskell-platform/files/59498406a6338d93891dec3abcbdde2cb7e41325.patch
+===================================================================
+--- devel/haskell-platform/files/59498406a6338d93891dec3abcbdde2cb7e41325.patch	(nonexistent)
++++ devel/haskell-platform/files/59498406a6338d93891dec3abcbdde2cb7e41325.patch	(working copy)
+@@ -0,0 +1,23 @@
++From 59498406a6338d93891dec3abcbdde2cb7e41325 Mon Sep 17 00:00:00 2001
++From: Oleg Grenrus <oleg.grenrus@iki.fi>
++Date: Wed, 23 Dec 2015 16:41:29 +0200
++Subject: [PATCH] Support transformers-0.5
++
++Upstream-Staus: Backport [https://github.com/ekmett/mtl/commit/59498406a6338d93891dec3abcbdde2cb7e41325]
++---
++ mtl.cabal | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mtl.cabal b/mtl.cabal
++index aaa5187..7702edd 100644
++--- a/mtl.cabal
+++++ b/mtl.cabal
++@@ -54,7 +54,7 @@ Library
++     Control.Monad.Writer.Class
++     Control.Monad.Writer.Lazy
++     Control.Monad.Writer.Strict
++-  build-depends: base < 6, transformers == 0.4.*
+++  build-depends: base < 6, transformers >= 0.4 && <0.6
++   extensions:
++     MultiParamTypeClasses
++     FunctionalDependencies
+Index: devel/haskell-platform/files/6c17dd6fadc5e7e3e09f7892380ce1339f296efd.patch
+===================================================================
+--- devel/haskell-platform/files/6c17dd6fadc5e7e3e09f7892380ce1339f296efd.patch	(nonexistent)
++++ devel/haskell-platform/files/6c17dd6fadc5e7e3e09f7892380ce1339f296efd.patch	(working copy)
+@@ -0,0 +1,25 @@
++From 6c17dd6fadc5e7e3e09f7892380ce1339f296efd Mon Sep 17 00:00:00 2001
++From: Herbert Valerio Riedel <hvr@gnu.org>
++Date: Sun, 1 Nov 2015 12:51:30 +0100
++Subject: [PATCH] Relax upper bound on `ghc-prim` to allow v0.5
++
++See https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/changelog.md for what changed
++
++Upstream-Status: Backport [https://github.com/haskell/vector/commit/6c17dd6fadc5e7e3e09f7892380ce1339f296efd]
++---
++ vector.cabal | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/vector.cabal b/vector.cabal
++index 3d3b0ff..d962c72 100644
++--- a/vector.cabal
+++++ b/vector.cabal
++@@ -140,7 +140,7 @@ Library
++ 
++   Build-Depends: base >= 4.3 && < 4.10
++                , primitive >= 0.5.0.1 && < 0.7
++-               , ghc-prim >= 0.2 && < 0.5
+++               , ghc-prim >= 0.2 && < 0.6
++                , deepseq >= 1.1 && < 1.5
++ 
++   Ghc-Options: -O2 -Wall -fno-warn-orphans
+Index: devel/haskell-platform/files/83d3d23d2fa1583ecd1b59464cc889924e1b5fff.patch
+===================================================================
+--- devel/haskell-platform/files/83d3d23d2fa1583ecd1b59464cc889924e1b5fff.patch	(nonexistent)
++++ devel/haskell-platform/files/83d3d23d2fa1583ecd1b59464cc889924e1b5fff.patch	(working copy)
+@@ -0,0 +1,25 @@
++From 83d3d23d2fa1583ecd1b59464cc889924e1b5fff Mon Sep 17 00:00:00 2001
++From: Herbert Valerio Riedel <hvr@gnu.org>
++Date: Sun, 1 Nov 2015 12:51:32 +0100
++Subject: [PATCH] Relax upper bound on `ghc-prim` to allow v0.5
++
++See https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/changelog.md for what changed
++
++Upstream-Status: Backport [https://github.com/haskell/primitive/commit/83d3d23d2fa1583ecd1b59464cc889924e1b5fff]
++---
++ primitive.cabal | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/primitive.cabal b/primitive.cabal
++index 2f35e9e..f034b78 100644
++--- a/primitive.cabal
+++++ b/primitive.cabal
++@@ -37,7 +37,7 @@ Library
++         Data.Primitive.Internal.Operations
++ 
++   Build-Depends: base >= 4.3 && < 4.10
++-               , ghc-prim >= 0.2 && < 0.5
+++               , ghc-prim >= 0.2 && < 0.6
++                , transformers >= 0.2 && < 0.5
++ 
++   Ghc-Options: -O2 -Wall
+Index: lang/ghc/Portfile
+===================================================================
+--- lang/ghc/Portfile	(revision 153494)
++++ lang/ghc/Portfile	(working copy)
+@@ -8,8 +8,8 @@
+ # Do not update GHC separate from Haskell Platform.
+ # When updating GHC, make sure to revbump all Haskell ports.
+ # Also make sure to update the version in the Haskell PortGroup.
+-version             7.8.3
+-revision            4
++version             8.0.1
++revision            0
+ categories          lang haskell
+ maintainers         cal openmaintainer
+ license             BSD
+@@ -34,30 +34,29 @@
+ distname        ${name}-${version}-src
+ worksrcdir      ${name}-${version}
+ 
+-use_bzip2       yes
++use_xz          yes
+ 
+ distfiles       ${name}-${version}-src${extract.suffix} \
+                 ${name}-${version}-testsuite${extract.suffix}
+ 
+-checksums       ghc-7.8.3-src.tar.bz2 \
+-                rmd160  464d31d924a8c1e23e94b3cae810c4e41dad4b75 \
+-                sha256  2358826f8424bf571dcc313bd882422fe108a340d6e37db4339ff6d5d6ac3f37 \
+-                ghc-7.8.3-testsuite.tar.bz2 \
+-                rmd160  abc39b71e2f3926b80c681428c447f39599d7d83 \
+-                sha256  9cfef874adf5b895701ae52e507f07049a64246af120ac15200e7bf612521122
++checksums       ghc-8.0.1-src.tar.xz \
++                rmd160  3ad5728492a7dd874de320fe0a3936fcd7681693 \
++                sha256  90fb20cd8712e3c0fbeb2eac8dab6894404c21569746655b9b12ca9684c7d1d2 \
++                ghc-8.0.1-testsuite.tar.xz \
++                rmd160  20e03e566d0842dfcd12f48fa0cc86c6d5a3caff \
++                sha256  bc57163656ece462ef61072559d491b72c5cdd694f3c39b80ac0f6b9a3dc8151
+ 
+ depends_build   port:ghc-bootstrap \
+                 port:libxslt
+ 
+-depends_lib     port:gmp           \
+-                port:ncurses       \
+-                port:libiconv      \
+-                port:llvm-3.5       \
++depends_lib     port:gmp \
++                port:ncurses \
++                port:libiconv \
++                port:llvm-3.7 \
+                 port:libffi
+ 
+-patchfiles      patch-configure-workaround-bsdsed-incompatibility.diff \
+-                patch-configure-disable-docs.diff \
+-                patch-unix_lib_osx_sandbox_compatibility.diff
++patchfiles      patch-configure-link-ghc-pwd-against-system-libiconv.diff \
++                buildpath-abi-stability.patch
+ 
+ livecheck.type  none
+ test.run        yes
+@@ -78,7 +77,7 @@
+                 macports-clang-3.3
+ 
+ set bootstraproot ${prefix}/share/ghc-bootstrap
+-set llvmPrefix  ${prefix}/libexec/llvm-3.5
++set llvmPrefix  ${prefix}/libexec/llvm-3.7
+ configure.args  --with-ghc=${bootstraproot}/bin/ghc \
+                 --with-iconv-includes=${prefix}/include \
+                 --with-iconv-libraries=${prefix}/lib \
+@@ -91,6 +90,16 @@
+                 --with-llc=${llvmPrefix}/bin/llc \
+                 --with-opt=${llvmPrefix}/bin/opt
+ 
++# See https://ghc.haskell.org/trac/ghc/ticket/11744
++pre-configure {
++    try {
++        set nmclassic [exec -- xcrun --find nm-classic]
++        if {$nmclassic ne ""} {
++            configure.args-append   --with-nm=${nmclassic}
++        }
++    } catch {*} {}
++}
++
+ # OK so because the bootstrap binary has been prebuilt for libraries in
+ # /usr/lib we search these in addition to MacPorts' paths to prevent link
+ # errors. GHC _should_ actually compile itself in stage2 using paths from the
+@@ -98,8 +107,10 @@
+ compiler.cpath /usr/include
+ compiler.library_path /usr/lib
+ 
+-build.args      VERBOSE=1
+-destroot.args   VERBOSE=1
++pre-configure {
++    file mkdir ${worksrcpath}/build
++    file copy -force ${filespath}/build.mk ${worksrcpath}/build/build.mk
++}
+ 
+ pre-activate {
+     set obsoletes [list]
+Index: lang/ghc/files/build.mk
+===================================================================
+--- lang/ghc/files/build.mk	(nonexistent)
++++ lang/ghc/files/build.mk	(working copy)
+@@ -0,0 +1,339 @@
++# -----------------------------------------------------------------------------
++# MacPorts GHC build configuration
++#
++# Uncomment one of the following BuildFlavour settings to get the desired
++# overall build type.
++
++# Disable building the documentation, we want to avoid the dependency
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++# -------- Build profiles -----------------------------------------------------
++# Uncomment one of these to select a build profile below:
++
++# Full build with max optimisation and everything enabled (very slow build)
++#BuildFlavour = perf
++
++# As above but build GHC using the LLVM backend
++#BuildFlavour = perf-llvm
++
++# Perf build configured for a cross-compiler
++#BuildFlavour = perf-cross
++
++# Fast build with optimised libraries, no profiling (RECOMMENDED):
++BuildFlavour = quick
++
++# Fast build with optimised libraries, no profiling, with LLVM:
++#BuildFlavour = quick-llvm
++
++# Fast build configured for a cross compiler
++#BuildFlavour  = quick-cross
++
++# Even faster build.  NOT RECOMMENDED: the libraries will be
++# completely unoptimised, so any code built with this compiler
++# (including stage2) will run very slowly:
++#BuildFlavour = quickest
++
++# Profile the stage2 compiler:
++#BuildFlavour = prof
++
++# A development build, working on the stage 1 compiler:
++#BuildFlavour = devel1
++
++# A development build, working on the stage 2 compiler:
++#BuildFlavour = devel2
++
++# A build with max optimisation that still builds the stage2 compiler
++# quickly. Compiled code will be the same as with "perf". Programs
++# will compile more slowly.
++#BuildFlavour = bench
++
++# As above but build GHC using the LLVM backend
++#BuildFlavour = bench-llvm
++
++# Bench build configured for a cross-compiler
++#BuildFlavour = bench-cross
++
++# Use the same settings as validate.
++#BuildFlavour = validate
++
++ifneq "$(BuildFlavour)" ""
++include mk/flavours/$(BuildFlavour).mk
++endif
++
++# -------- Miscellaneous variables --------------------------------------------
++
++# Set to V = 0 to get prettier build output.
++# Please use V=1 (the default) when reporting GHC bugs.
++V = 0
++
++# Should all enabled warnings (see mk/warnings.mk) be turned into errors while
++# building stage 2?
++#WERROR=-Werror
++
++# After stage 1 and the libraries have been built, you can uncomment this line:
++#stage=2
++
++# Then stage 1 will not be touched by the build system, until
++# you comment the line again.  This is a useful trick for when you're
++# working on stage 2 and want to freeze stage 1 and the libraries for
++# a while.
++
++# Build the "extra" packages (see ./packages). This enables more tests. See:
++# https://ghc.haskell.org/trac/ghc/wiki/Building/RunningTests/Running#AdditionalPackages
++#BUILD_EXTRA_PKGS=YES
++
++# Uncomment the following line to enable building DPH
++#BUILD_DPH=YES
++
++# Uncomment the following to force `integer-gmp` to use the in-tree GMP 5.0.4
++# (other sometimes useful configure-options: `--with-gmp-{includes,libraries}`)
++#libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-intree-gmp
++
++GhcLibWays = $(if $(filter $(DYNAMIC_GHC_PROGRAMS),YES),v dyn,v)
++
++# Only use -fasm by default on platforms that support it.
++GhcFAsm = $(if $(filter $(GhcWithNativeCodeGen),YES),-fasm,)
++
++# ----------- A Performance/Distribution build --------------------------------
++
++ifeq "$(BuildFlavour)" "perf"
++
++# perf matches the default settings, repeated here for comparison:
++
++SRC_HC_OPTS     = -O -H64m
++GhcStage1HcOpts = -O $(GhcFAsm)
++GhcStage2HcOpts = -O2 $(GhcFAsm)
++GhcHcOpts       = -Rghc-timing
++GhcLibHcOpts    = -O2
++GhcLibWays     += p
++
++ifeq "$(PlatformSupportsSharedLibs)" "YES"
++GhcLibWays += dyn
++endif
++
++endif
++
++# ---------------- Perf build using LLVM --------------------------------------
++
++ifeq "$(BuildFlavour)" "perf-llvm"
++
++SRC_HC_OPTS     = -O -H64m -fllvm
++GhcStage1HcOpts = -O -fllvm
++GhcStage2HcOpts = -O2 -fllvm
++GhcHcOpts       = -Rghc-timing
++GhcLibHcOpts    = -O2
++GhcLibWays     += p
++
++endif
++
++# ------- A Perf build configured for cross-compilation ----------------------
++
++ifeq "$(BuildFlavour)" "perf-cross"
++
++SRC_HC_OPTS     = -O -H64m -fllvm
++GhcStage1HcOpts = -O2
++GhcStage2HcOpts = -O2 -fllvm
++GhcHcOpts       = -Rghc-timing
++GhcLibHcOpts    = -O2
++GhcLibWays     += p
++INTEGER_LIBRARY    = integer-simple
++Stage1Only         = YES
++
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++DYNAMIC_BY_DEFAULT   = NO
++DYNAMIC_GHC_PROGRAMS = NO
++
++endif
++
++# -------- A Fast build -------------------------------------------------------
++
++ifeq "$(BuildFlavour)" "quickest"
++
++SRC_HC_OPTS        = -H64m -O0 $(GhcFAsm)
++GhcStage1HcOpts    = -O $(GhcFAsm)
++GhcStage2HcOpts    = -O0 $(GhcFAsm)
++GhcLibHcOpts       = -O0 $(GhcFAsm)
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++endif
++
++# -------- A Fast build with optimised libs -----------------------------------
++
++ifeq "$(BuildFlavour)" "quick"
++
++SRC_HC_OPTS        = -H64m -O0 $(GhcFAsm)
++GhcStage1HcOpts    = -O $(GhcFAsm)
++GhcStage2HcOpts    = -O0 $(GhcFAsm)
++GhcLibHcOpts       = -O $(GhcFAsm)
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++endif
++
++# -------- A Fast build with optimised libs using LLVM ------------------------
++
++ifeq "$(BuildFlavour)" "quick-llvm"
++
++SRC_HC_OPTS        = -H64m -O0 -fllvm
++GhcStage1HcOpts    = -O -fllvm
++GhcStage2HcOpts    = -O0 -fllvm
++GhcLibHcOpts       = -O -fllvm
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++endif
++
++# -------- A Fast build configured for cross-compilation ----------------------
++
++ifeq "$(BuildFlavour)" "quick-cross"
++
++SRC_HC_OPTS        = -H64m -O0
++GhcStage1HcOpts    = -O
++GhcStage2HcOpts    = -O0 -fllvm
++GhcLibHcOpts       = -O -fllvm
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++INTEGER_LIBRARY    = integer-simple
++Stage1Only         = YES
++
++DYNAMIC_BY_DEFAULT   = NO
++DYNAMIC_GHC_PROGRAMS = NO
++
++endif
++
++# -------- Profile the stage2 compiler ----------------------------------------
++
++ifeq "$(BuildFlavour)" "prof"
++
++SRC_HC_OPTS        = -H64m -O0 $(GhcFAsm)
++GhcStage1HcOpts    = -O $(GhcFAsm)
++GhcStage2HcOpts    = -O $(GhcFAsm)
++GhcLibHcOpts       = -O $(GhcFAsm)
++
++GhcLibWays         += p
++GhcProfiled        = YES
++
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++endif
++
++# -------- A Development build (stage 1) --------------------------------------
++
++ifeq "$(BuildFlavour)" "devel1"
++
++SRC_HC_OPTS        = -H64m -O $(GhcFAsm)
++GhcLibHcOpts       = -O -dcore-lint
++GhcStage1HcOpts    = -Rghc-timing -O0 -DDEBUG
++GhcStage2HcOpts    = -Rghc-timing -O $(GhcFAsm)
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++LAX_DEPENDENCIES   = YES
++
++endif
++
++# -------- A Development build (stage 2) --------------------------------------
++
++ifeq "$(BuildFlavour)" "devel2"
++
++SRC_HC_OPTS        = -H64m -O $(GhcFAsm)
++GhcLibHcOpts       = -O -dcore-lint
++GhcStage1HcOpts    = -Rghc-timing -O $(GhcFAsm)
++GhcStage2HcOpts    = -Rghc-timing -O0 -DDEBUG
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++LAX_DEPENDENCIES   = YES
++
++endif
++
++# -------- A bench build with optimised libs -----------------------------------
++
++ifeq "$(BuildFlavour)" "bench"
++
++SRC_HC_OPTS        = -O -H64m
++GhcStage1HcOpts    = -O $(GhcFAsm)
++GhcStage2HcOpts    = -O0 $(GhcFAsm)
++GhcLibHcOpts       = -O2 $(GhcFAsm)
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++endif
++
++# ---------------- Bench build using LLVM --------------------------------------
++
++ifeq "$(BuildFlavour)" "bench-llvm"
++
++SRC_HC_OPTS        = -O -H64m
++GhcStage1HcOpts    = -O -fllvm
++GhcStage2HcOpts    = -O0 -fllvm
++GhcLibHcOpts       = -O2 -fllvm
++SplitObjs          = NO
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++endif
++
++# ------- A Bench build configured for cross-compilation ----------------------
++
++ifeq "$(BuildFlavour)" "bench-cross"
++
++SRC_HC_OPTS        = -O -H64m
++GhcStage1HcOpts    = -O $(GhcFAsm)
++GhcStage2HcOpts    = -O0 $(GhcFAsm)
++GhcLibHcOpts       = -O2 $(GhcFAsm)
++SplitObjs          = NO
++INTEGER_LIBRARY    = integer-simple
++Stage1Only         = YES
++HADDOCK_DOCS       = NO
++BUILD_DOCBOOK_HTML = NO
++BUILD_DOCBOOK_PS   = NO
++BUILD_DOCBOOK_PDF  = NO
++
++DYNAMIC_BY_DEFAULT   = NO
++DYNAMIC_GHC_PROGRAMS = NO
++
++endif
++
++# -----------------------------------------------------------------------------
++# Other settings that might be useful
++
++# NoFib settings
++NoFibWays =
++STRIP_CMD = :
++
++# ghc-pwd needs to link against /usr/lib/libiconv.dylib explicitly, because
++# ghc-bootstrap's base library .a archive expects it
++utils/ghc-pwd_EXTRA_LIBRARIES += "/usr/lib/libiconv.dylib"
+Index: lang/ghc/files/buildpath-abi-stability.patch
+===================================================================
+--- lang/ghc/files/buildpath-abi-stability.patch	(nonexistent)
++++ lang/ghc/files/buildpath-abi-stability.patch	(working copy)
+@@ -0,0 +1,35 @@
++Avoid leaking build path into ABI hashes
++
++GHC's build path leaks into the ABI hashes it generates by default. This
++causes problems because it means that recompiling GHC in a different path
++also requires recompiling all Haskell packages. Obviously, this is
++undesirable for a distribution.
++
++This patch originates from Debian's Joachim Breitner. See
++http://bugs.debian.org/785282 for the Debian bug report. It has been
++submitted upstream in https://ghc.haskell.org/trac/ghc/ticket/10424.
++
++Upstream-Status: Submitted [https://ghc.haskell.org/trac/ghc/ticket/10424]
++Index: ./compiler/iface/MkIface.hs
++===================================================================
++--- ./compiler/iface/MkIface.hs	2015-05-17 20:34:02.808643844 +0200
+++++ ./compiler/iface/MkIface.hs	2015-05-17 20:34:02.804643799 +0200
++@@ -611,7 +611,7 @@
++    iface_hash <- computeFingerprint putNameLiterally
++                       (mod_hash,
++                        ann_fn (mkVarOcc "module"),  -- See mkIfaceAnnCache
++-                       mi_usages iface0,
+++                       usages,
++                        sorted_deps,
++                        mi_hpc iface0)
++ 
++@@ -644,6 +644,9 @@
++     (non_orph_fis,   orph_fis)   = mkOrphMap ifFamInstOrph (mi_fam_insts iface0)
++     fix_fn = mi_fix_fn iface0
++     ann_fn = mkIfaceAnnCache (mi_anns iface0)
+++    -- Do not allow filenames to affect the interface
+++    usages = [ case u of UsageFile _ fp -> UsageFile "" fp; _ -> u | u <- mi_usages iface0 ]
+++
++ 
++ getOrphanHashes :: HscEnv -> [Module] -> IO [Fingerprint]
++ getOrphanHashes hsc_env mods = do
+Index: lang/ghc/files/patch-configure-disable-docs.diff
+===================================================================
+--- lang/ghc/files/patch-configure-disable-docs.diff	(revision 153494)
++++ lang/ghc/files/patch-configure-disable-docs.diff	(nonexistent)
+@@ -1,12 +0,0 @@
+---- configure.orig	2014-09-17 23:12:43.000000000 +0200
+-+++ configure	2014-09-17 23:13:29.000000000 +0200
+-@@ -11943,6 +11943,9 @@
+-     BUILD_DOCBOOK_PS=YES
+-     BUILD_DOCBOOK_PDF=YES
+- fi
+-+BUILD_DOCBOOK_HTML=NO
+-+BUILD_DOCBOOK_PS=NO
+-+BUILD_DOCBOOK_PDF=NO
+- 
+- 
+- 
+Index: lang/ghc/files/patch-configure-link-ghc-pwd-against-system-libiconv.diff
+===================================================================
+--- lang/ghc/files/patch-configure-link-ghc-pwd-against-system-libiconv.diff	(nonexistent)
++++ lang/ghc/files/patch-configure-link-ghc-pwd-against-system-libiconv.diff	(working copy)
+@@ -0,0 +1,20 @@
++Fix initial build of ghc-pwd due to missing libiconv
++
++ghc-pwd fails to build because it is built using ghc-bootstrap, which ships
++libHSbase-$version.a, which references symbols from libiconv (and actually the
++system libiconv, because the MacPorts use uses _libiconv as symbol names, but
++the archive uses _iconv). Fix this by explicitly linking against the system
++libiconv for this initial build of ghc-pwd.
++
++Upstream-Status: Inappropriate (/usr/lib/libiconv.dylib is system-specific; a generic solution would be needed)
++--- configure.orig	2016-05-20 23:40:29.000000000 +0200
+++++ configure	2016-05-20 23:41:06.000000000 +0200
++@@ -4149,7 +4149,7 @@
++ $as_echo "$as_me: Building in-tree ghc-pwd" >&6;}
++                 rm -rf utils/ghc-pwd/dist-boot
++     mkdir  utils/ghc-pwd/dist-boot
++-                GHC_LDFLAGS=`perl -e 'foreach (@ARGV) { print "-optl$_ " }' -- $LDFLAGS`
+++                GHC_LDFLAGS=`perl -e 'foreach (@ARGV) { print "-optl$_ " }' -- $LDFLAGS /usr/lib/libiconv.dylib`
++         if ! "$WithGhc" $GHC_LDFLAGS -v0 -no-user-$GHC_PACKAGE_DB_FLAG -hidir utils/ghc-pwd/dist-boot -odir utils/ghc-pwd/dist-boot -stubdir utils/ghc-pwd/dist-boot --make utils/ghc-pwd/Main.hs -o utils/ghc-pwd/dist-boot/ghc-pwd
++     then
++         as_fn_error $? "Building ghc-pwd failed" "$LINENO" 5
+Index: lang/ghc/files/patch-configure-workaround-bsdsed-incompatibility.diff
+===================================================================
+--- lang/ghc/files/patch-configure-workaround-bsdsed-incompatibility.diff	(revision 153494)
++++ lang/ghc/files/patch-configure-workaround-bsdsed-incompatibility.diff	(nonexistent)
+@@ -1,11 +0,0 @@
+---- configure.orig	2014-09-17 22:40:16.000000000 +0200
+-+++ configure	2014-09-17 22:40:40.000000000 +0200
+-@@ -4075,7 +4075,7 @@
+- $as_echo "$as_me: Building in-tree ghc-pwd" >&6;}
+-                 rm -rf utils/ghc-pwd/dist-boot
+-     mkdir  utils/ghc-pwd/dist-boot
+--                GHC_LDFLAGS=`echo $LDFLAGS | sed 's/\(^\| \)\([^ ]\)/\1-optl\2/g'`
+-+                GHC_LDFLAGS= # this breaks our build with BSD sed, and we don't need the LDFLAGS here
+-         if ! "$WithGhc" $GHC_LDFLAGS -v0 -no-user-$GHC_PACKAGE_DB_FLAG -hidir utils/ghc-pwd/dist-boot -odir utils/ghc-pwd/dist-boot -stubdir utils/ghc-pwd/dist-boot --make utils/ghc-pwd/Main.hs -o utils/ghc-pwd/dist-boot/ghc-pwd
+-     then
+-         as_fn_error $? "Building ghc-pwd failed" "$LINENO" 5
+Index: lang/ghc/files/patch-unix_lib_osx_sandbox_compatibility.diff
+===================================================================
+--- lang/ghc/files/patch-unix_lib_osx_sandbox_compatibility.diff	(revision 153494)
++++ lang/ghc/files/patch-unix_lib_osx_sandbox_compatibility.diff	(nonexistent)
+@@ -1,28 +0,0 @@
+---- libraries/unix/System/Posix/Files.hsc.orig	2014-09-21 17:58:47.000000000 +0200
+-+++ libraries/unix/System/Posix/Files.hsc	2014-09-21 17:59:31.000000000 +0200
+-@@ -152,7 +152,8 @@
+-     if (r == 0)
+-         then return True
+-         else do err <- getErrno
+--                if (err == eACCES || err == eROFS || err == eTXTBSY)
+-+                if (err == eACCES || err == eROFS || err == eTXTBSY ||
+-+                    err == ePERM)
+-                    then return False
+-                    else throwErrnoPath "fileAccess" name
+- 
+---- libraries/unix/System/Posix/Files/ByteString.hsc.orig	2014-09-21 17:58:54.000000000 +0200
+-+++ libraries/unix/System/Posix/Files/ByteString.hsc	2014-09-21 18:02:27.000000000 +0200
+-@@ -158,9 +158,10 @@
+-     if (r == 0)
+- 	then return True
+- 	else do err <- getErrno
+--	        if (err == eACCES)
+--		   then return False
+--		   else throwErrnoPath "fileAccess" name
+-+                if (err == eACCES || err == eROFS || err == eTXTBSY ||
+-+                    err == ePERM)
+-+                   then return False
+-+                   else throwErrnoPath "fileAccess" name
+- 
+- 
+- -- | @getFileStatus path@ calls gets the @FileStatus@ information (user ID,
+Index: lang/ghc-bootstrap/Portfile
+===================================================================
+--- lang/ghc-bootstrap/Portfile	(revision 153494)
++++ lang/ghc-bootstrap/Portfile	(working copy)
+@@ -6,39 +6,43 @@
+ 
+ name                ghc-bootstrap
+ set canonicalname   ghc
+-# Note: 7.6.3 doesn't have a i386 darwin version at http://www.haskell.org/ghc/dist/7.6.3
+-version             7.6.2
+-revision            1
++
++version             7.10.3
+ categories          lang haskell
+ maintainers         cal openmaintainer
+ license             BSD
+ platforms           darwin
+-supported_archs     i386 x86_64
++
++# Warning: http://downloads.haskell.org/~ghc/7.10.3/ does not have a i386
++# darwin build and 7.6.2 (which seems to be the latest build that has it) is
++# affected by https://github.com/haskell/unix/pull/18, which causes the GHC
++# build to fail on El Capitan and later. This means that
++#  (a) I (or somebody else) would have to build a i386 ghc-bootstrap
++#  (b) i386 builds of GHC are no longer supported.
++# I'm going with (b) until somebody on i386 volunteers to build a ghc-bootstrap
++# or convinces upstream to do so.
++supported_archs     x86_64
++
+ universal_variant   no
+ installs_libs       no
+ 
+ description         The Glorious Glasgow Haskell Compilation System
+-long_description    \
+-                    This is a package that installs a binary \
+-                    bootstrap ghc compiler.
++long_description    This is a package that installs a binary GHC compiler for bootstrapping.
+ 
+-homepage            http://haskell.org/${canonicalname}
+-master_sites        ${homepage}/dist/${version}/
++homepage            https://haskell.org/${canonicalname}
++master_sites        https://downloads.haskell.org/~${canonicalname}/${version}/
+ distname            ${canonicalname}-${version}-${build_arch}-apple-darwin
+ worksrcdir          ${canonicalname}-${version}
+-use_bzip2           yes
++use_xz              yes
+ 
+-checksums           ${canonicalname}-${version}-i386-apple-darwin${extract.suffix} \
+-                        rmd160  232b3aa4ed9e2ff09d520f4ae02fa572a671178a \
+-                        sha256  c1da502fa7d99f3d87370c65d705a7e8ee4c900fdb62df6f71696c5432047059 \
+-                    ${canonicalname}-${version}-x86_64-apple-darwin${extract.suffix} \
+-                        rmd160  b0870a4a292fae7248f9b0be485affa4a5a76a2d \
+-                        sha256  eb0dd19bd5a6eede332d58de219437b9c2b186c72a1fc0c60fa1095b0c2d2789
+-
+-post-extract {
+-    # Copy clang-wrapper for re-inplace during configure
+-    xinstall -m 644 ${filespath}/clang-wrapper ${workpath}/clang-wrapper
+-}
++checksums           ${canonicalname}-${version}-x86_64-apple-darwin${extract.suffix} \
++                    rmd160  4f556937880d853448b482bfc7d7f1a6a0dd220f \
++                    sha256  852781d43d41cd55d02f818fe798bb4d1f7e52f488408167f413f7948cf1e7df
++
++#post-extract {
++#    # Copy clang-wrapper for re-inplace during configure
++#    xinstall -m 644 ${filespath}/clang-wrapper ${workpath}/clang-wrapper
++#}
+ 
+ # Compilation (of the final non-bootstrap GHC, which uses the C compiler
+ # configured in this port) fails with older versions of clang. clang-4.1 from
+@@ -56,42 +60,52 @@
+ configure.pre_args  --prefix=${prefix}/share/ghc-bootstrap
+ configure.args      --with-gcc=${configure.cc}
+ 
+-pre-configure {
+-    # OK so because this binary has been prebuilt for libraries
+-    # in /usr/lib we search these before macports stuff so (hopefully)
+-    # weird things don't happen
+-    configure.ldflags  -L/usr/lib
+-    configure.cppflags -I/usr/include
+-
+-    # patch clang-wrapper and make sure it is used by patching settings.in
+-    reinplace "s#@clang@#${configure.cc}#g" ${workpath}/clang-wrapper
+-    reinplace "s#@SettingsCCompilerCommand@#${prefix}/share/ghc-bootstrap/libexec/clang-wrapper#g" ${worksrcpath}/settings.in
+-}
++#pre-configure {
++#    # OK so because this binary has been prebuilt for libraries
++#    # in /usr/lib we search these before macports stuff so (hopefully)
++#    # weird things don't happen
++#    configure.ldflags  -L/usr/lib
++#    configure.cppflags -I/usr/include
++#
++#    # patch clang-wrapper and make sure it is used by patching settings.in
++#    reinplace "s#@clang@#${configure.cc}#g" ${workpath}/clang-wrapper
++#    reinplace "s#@SettingsCCompilerCommand@#${prefix}/share/ghc-bootstrap/libexec/clang-wrapper#g" ${worksrcpath}/settings.in
++#}
+ 
+ build {}
+ 
+ post-destroot {
+-    # install clang-wrapper to libexec
+-    xinstall -d -m 755 ${destroot}${prefix}/share/ghc-bootstrap/libexec
+-    xinstall -m 755 ${workpath}/clang-wrapper ${destroot}${prefix}/share/ghc-bootstrap/libexec
+-
+-    # Delete all .dylib files, because their load commands would have to be
+-    # fixed or rev-upgrade complains and tries to rebuild the port. However, we
+-    # cannot correctly fix all .dylibs, because the have not been built with
+-    # -headerpad_max_install_names. Deleting them fixes the problem and GHC
+-    # still seems to compile correctly.
+-
+-    # We also delete all the .html files, because we really don't need the
+-    # documentation in a bootstrap port.
+-
++    ## install clang-wrapper to libexec
++    #xinstall -d -m 755 ${destroot}${prefix}/share/ghc-bootstrap/libexec
++    #xinstall -m 755 ${workpath}/clang-wrapper ${destroot}${prefix}/share/ghc-bootstrap/libexec
++
++    # Delete all .dylib files, because some of them reference nonexistant
++    # libraries (e.g.
++    #   /opt/local/share/ghc-bootstrap/lib/ghc-7.10.3/Cabal_3ux67khMI118y6VpwrFnXN/libHSCabal-1.22.5.0-3ux67khMI118y6VpwrFnXN-ghc7.10.3.dylib
++    # references
++    #   /usr/local/lib/gcc/5/libgcc_s.1.dylib
++    # which does not exist) and rev-upgrade complains and tries to rebuild the
++    # port. Deleting them breaks bootstrapping using dynamic libraries in GHC,
++    # but since the static libraries are still there, that is not a serious
++    # problem.
++    set nametool "install_name_tool -change /usr/local/lib/gcc/5/libgcc_s.1.dylib /usr/lib/libgcc_s.1.dylib"
+     fs-traverse f ${destroot}${prefix} {
+         if {[file isfile ${f}]} {
+             set ext [file extension ${f}]
+-            if {${ext} eq ".html" || ${ext} eq ".dylib"} {
+-                delete ${f}
++            if {${ext} eq ".dylib"} {
++                system "${nametool} ${f}"
+             }
+         }
+     }
++    fs-traverse f ${destroot}${prefix}/share/ghc-bootstrap/lib/ghc-${version}/bin {
++        if {[file type $f] eq "file"} {
++            system "${nametool} ${f}"
++        }
++    }
++
++    # We also delete $prefix/share/ghc-bootstrap/share/doc, because we
++    # really don't need the documentation in a bootstrap port.
++    delete ${destroot}${prefix}/share/ghc-bootstrap/share/doc
+ }
+ 
+ livecheck.type      none
