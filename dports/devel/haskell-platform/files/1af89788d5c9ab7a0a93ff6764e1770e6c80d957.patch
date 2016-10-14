@@ -1,0 +1,23 @@
+From 1af89788d5c9ab7a0a93ff6764e1770e6c80d957 Mon Sep 17 00:00:00 2001
+From: Herbert Valerio Riedel <hvr@gnu.org>
+Date: Sun, 20 Dec 2015 23:17:37 +0100
+Subject: [PATCH] Relax upper bound to allow transformers-0.5
+
+Upstream-Status: Backport [https://github.com/haskell/primitive/commit/1af89788d5c9ab7a0a93ff6764e1770e6c80d957]
+---
+ primitive.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/primitive.cabal b/primitive.cabal
+index f034b78..982d2f4 100644
+--- a/primitive.cabal
++++ b/primitive.cabal
+@@ -38,7 +38,7 @@ Library
+ 
+   Build-Depends: base >= 4.3 && < 4.10
+                , ghc-prim >= 0.2 && < 0.6
+-               , transformers >= 0.2 && < 0.5
++               , transformers >= 0.2 && < 0.6
+ 
+   Ghc-Options: -O2 -Wall
+ 

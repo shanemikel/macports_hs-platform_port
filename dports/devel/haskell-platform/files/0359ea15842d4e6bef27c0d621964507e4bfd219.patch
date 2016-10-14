@@ -1,0 +1,23 @@
+From 0359ea15842d4e6bef27c0d621964507e4bfd219 Mon Sep 17 00:00:00 2001
+From: Herbert Valerio Riedel <hvr@gnu.org>
+Date: Sat, 31 Oct 2015 10:03:39 +0100
+Subject: [PATCH] Bump upper bound to allow base-4.9
+
+Upstream-Stauts: Backport [https://github.com/haskell/primitive/commit/0359ea15842d4e6bef27c0d621964507e4bfd219]
+---
+ primitive.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/primitive.cabal b/primitive.cabal
+index 232dccc..2f35e9e 100644
+--- a/primitive.cabal
++++ b/primitive.cabal
+@@ -36,7 +36,7 @@ Library
+         Data.Primitive.Internal.Compat
+         Data.Primitive.Internal.Operations
+ 
+-  Build-Depends: base >= 4.3 && < 4.9
++  Build-Depends: base >= 4.3 && < 4.10
+                , ghc-prim >= 0.2 && < 0.5
+                , transformers >= 0.2 && < 0.5
+ 

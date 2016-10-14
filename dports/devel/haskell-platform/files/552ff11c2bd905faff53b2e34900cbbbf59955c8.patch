@@ -1,0 +1,23 @@
+From 552ff11c2bd905faff53b2e34900cbbbf59955c8 Mon Sep 17 00:00:00 2001
+From: Herbert Valerio Riedel <hvr@gnu.org>
+Date: Sat, 31 Oct 2015 10:02:58 +0100
+Subject: [PATCH] Bump upper bound to allow base-4.9
+
+Upstream-Status: Backport [https://github.com/haskell/vector/commit/552ff11c2bd905faff53b2e34900cbbbf59955c8]
+---
+ vector.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/vector.cabal b/vector.cabal
+index 062fd38..3d3b0ff 100644
+--- a/vector.cabal
++++ b/vector.cabal
+@@ -138,7 +138,7 @@ Library
+   Install-Includes:
+         vector.h
+ 
+-  Build-Depends: base >= 4.3 && < 4.9
++  Build-Depends: base >= 4.3 && < 4.10
+                , primitive >= 0.5.0.1 && < 0.7
+                , ghc-prim >= 0.2 && < 0.5
+                , deepseq >= 1.1 && < 1.5

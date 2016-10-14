@@ -6,39 +6,43 @@ PortGroup           compiler_blacklist_versions 1.0
 
 name                ghc-bootstrap
 set canonicalname   ghc
-# Note: 7.6.3 doesn't have a i386 darwin version at http://www.haskell.org/ghc/dist/7.6.3
-version             7.6.2
-revision            1
+
+version             7.10.3
 categories          lang haskell
 maintainers         cal openmaintainer
 license             BSD
 platforms           darwin
-supported_archs     i386 x86_64
+
+# Warning: http://downloads.haskell.org/~ghc/7.10.3/ does not have a i386
+# darwin build and 7.6.2 (which seems to be the latest build that has it) is
+# affected by https://github.com/haskell/unix/pull/18, which causes the GHC
+# build to fail on El Capitan and later. This means that
+#  (a) I (or somebody else) would have to build a i386 ghc-bootstrap
+#  (b) i386 builds of GHC are no longer supported.
+# I'm going with (b) until somebody on i386 volunteers to build a ghc-bootstrap
+# or convinces upstream to do so.
+supported_archs     x86_64
+
 universal_variant   no
 installs_libs       no
 
 description         The Glorious Glasgow Haskell Compilation System
-long_description    \
-                    This is a package that installs a binary \
-                    bootstrap ghc compiler.
+long_description    This is a package that installs a binary GHC compiler for bootstrapping.
 
-homepage            http://haskell.org/${canonicalname}
-master_sites        ${homepage}/dist/${version}/
+homepage            https://haskell.org/${canonicalname}
+master_sites        https://downloads.haskell.org/~${canonicalname}/${version}/
 distname            ${canonicalname}-${version}-${build_arch}-apple-darwin
 worksrcdir          ${canonicalname}-${version}
-use_bzip2           yes
+use_xz              yes
 
-checksums           ${canonicalname}-${version}-i386-apple-darwin${extract.suffix} \
-                        rmd160  232b3aa4ed9e2ff09d520f4ae02fa572a671178a \
-                        sha256  c1da502fa7d99f3d87370c65d705a7e8ee4c900fdb62df6f71696c5432047059 \
-                    ${canonicalname}-${version}-x86_64-apple-darwin${extract.suffix} \
-                        rmd160  b0870a4a292fae7248f9b0be485affa4a5a76a2d \
-                        sha256  eb0dd19bd5a6eede332d58de219437b9c2b186c72a1fc0c60fa1095b0c2d2789
+checksums           ${canonicalname}-${version}-x86_64-apple-darwin${extract.suffix} \
+                    rmd160  4f556937880d853448b482bfc7d7f1a6a0dd220f \
+                    sha256  852781d43d41cd55d02f818fe798bb4d1f7e52f488408167f413f7948cf1e7df
 
-post-extract {
-    # Copy clang-wrapper for re-inplace during configure
-    xinstall -m 644 ${filespath}/clang-wrapper ${workpath}/clang-wrapper
-}
+#post-extract {
+#    # Copy clang-wrapper for re-inplace during configure
+#    xinstall -m 644 ${filespath}/clang-wrapper ${workpath}/clang-wrapper
+#}
 
 # Compilation (of the final non-bootstrap GHC, which uses the C compiler
 # configured in this port) fails with older versions of clang. clang-4.1 from
@@ -56,42 +60,52 @@ compiler.blacklist-append \
 configure.pre_args  --prefix=${prefix}/share/ghc-bootstrap
 configure.args      --with-gcc=${configure.cc}
 
-pre-configure {
-    # OK so because this binary has been prebuilt for libraries
-    # in /usr/lib we search these before macports stuff so (hopefully)
-    # weird things don't happen
-    configure.ldflags  -L/usr/lib
-    configure.cppflags -I/usr/include
-
-    # patch clang-wrapper and make sure it is used by patching settings.in
-    reinplace "s#@clang@#${configure.cc}#g" ${workpath}/clang-wrapper
-    reinplace "s#@SettingsCCompilerCommand@#${prefix}/share/ghc-bootstrap/libexec/clang-wrapper#g" ${worksrcpath}/settings.in
-}
+#pre-configure {
+#    # OK so because this binary has been prebuilt for libraries
+#    # in /usr/lib we search these before macports stuff so (hopefully)
+#    # weird things don't happen
+#    configure.ldflags  -L/usr/lib
+#    configure.cppflags -I/usr/include
+#
+#    # patch clang-wrapper and make sure it is used by patching settings.in
+#    reinplace "s#@clang@#${configure.cc}#g" ${workpath}/clang-wrapper
+#    reinplace "s#@SettingsCCompilerCommand@#${prefix}/share/ghc-bootstrap/libexec/clang-wrapper#g" ${worksrcpath}/settings.in
+#}
 
 build {}
 
 post-destroot {
-    # install clang-wrapper to libexec
-    xinstall -d -m 755 ${destroot}${prefix}/share/ghc-bootstrap/libexec
-    xinstall -m 755 ${workpath}/clang-wrapper ${destroot}${prefix}/share/ghc-bootstrap/libexec
+    ## install clang-wrapper to libexec
+    #xinstall -d -m 755 ${destroot}${prefix}/share/ghc-bootstrap/libexec
+    #xinstall -m 755 ${workpath}/clang-wrapper ${destroot}${prefix}/share/ghc-bootstrap/libexec
 
-    # Delete all .dylib files, because their load commands would have to be
-    # fixed or rev-upgrade complains and tries to rebuild the port. However, we
-    # cannot correctly fix all .dylibs, because the have not been built with
-    # -headerpad_max_install_names. Deleting them fixes the problem and GHC
-    # still seems to compile correctly.
-
-    # We also delete all the .html files, because we really don't need the
-    # documentation in a bootstrap port.
-
+    # Delete all .dylib files, because some of them reference nonexistant
+    # libraries (e.g.
+    #   /opt/local/share/ghc-bootstrap/lib/ghc-7.10.3/Cabal_3ux67khMI118y6VpwrFnXN/libHSCabal-1.22.5.0-3ux67khMI118y6VpwrFnXN-ghc7.10.3.dylib
+    # references
+    #   /usr/local/lib/gcc/5/libgcc_s.1.dylib
+    # which does not exist) and rev-upgrade complains and tries to rebuild the
+    # port. Deleting them breaks bootstrapping using dynamic libraries in GHC,
+    # but since the static libraries are still there, that is not a serious
+    # problem.
+    set nametool "install_name_tool -change /usr/local/lib/gcc/5/libgcc_s.1.dylib /usr/lib/libgcc_s.1.dylib"
     fs-traverse f ${destroot}${prefix} {
         if {[file isfile ${f}]} {
             set ext [file extension ${f}]
-            if {${ext} eq ".html" || ${ext} eq ".dylib"} {
-                delete ${f}
+            if {${ext} eq ".dylib"} {
+                system "${nametool} ${f}"
             }
         }
     }
+    fs-traverse f ${destroot}${prefix}/share/ghc-bootstrap/lib/ghc-${version}/bin {
+        if {[file type $f] eq "file"} {
+            system "${nametool} ${f}"
+        }
+    }
+
+    # We also delete $prefix/share/ghc-bootstrap/share/doc, because we
+    # really don't need the documentation in a bootstrap port.
+    delete ${destroot}${prefix}/share/ghc-bootstrap/share/doc
 }
 
 livecheck.type      none

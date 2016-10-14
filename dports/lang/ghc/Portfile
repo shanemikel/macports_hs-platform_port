@@ -8,8 +8,8 @@ name                ghc
 # Do not update GHC separate from Haskell Platform.
 # When updating GHC, make sure to revbump all Haskell ports.
 # Also make sure to update the version in the Haskell PortGroup.
-version             7.8.3
-revision            4
+version             8.0.1
+revision            0
 categories          lang haskell
 maintainers         cal openmaintainer
 license             BSD
@@ -34,30 +34,29 @@ master_sites    ${homepage}/dist/${version}/
 distname        ${name}-${version}-src
 worksrcdir      ${name}-${version}
 
-use_bzip2       yes
+use_xz          yes
 
 distfiles       ${name}-${version}-src${extract.suffix} \
                 ${name}-${version}-testsuite${extract.suffix}
 
-checksums       ghc-7.8.3-src.tar.bz2 \
-                rmd160  464d31d924a8c1e23e94b3cae810c4e41dad4b75 \
-                sha256  2358826f8424bf571dcc313bd882422fe108a340d6e37db4339ff6d5d6ac3f37 \
-                ghc-7.8.3-testsuite.tar.bz2 \
-                rmd160  abc39b71e2f3926b80c681428c447f39599d7d83 \
-                sha256  9cfef874adf5b895701ae52e507f07049a64246af120ac15200e7bf612521122
+checksums       ghc-8.0.1-src.tar.xz \
+                rmd160  3ad5728492a7dd874de320fe0a3936fcd7681693 \
+                sha256  90fb20cd8712e3c0fbeb2eac8dab6894404c21569746655b9b12ca9684c7d1d2 \
+                ghc-8.0.1-testsuite.tar.xz \
+                rmd160  20e03e566d0842dfcd12f48fa0cc86c6d5a3caff \
+                sha256  bc57163656ece462ef61072559d491b72c5cdd694f3c39b80ac0f6b9a3dc8151
 
 depends_build   port:ghc-bootstrap \
                 port:libxslt
 
-depends_lib     port:gmp           \
-                port:ncurses       \
-                port:libiconv      \
-                port:llvm-3.5       \
+depends_lib     port:gmp \
+                port:ncurses \
+                port:libiconv \
+                port:llvm-3.7 \
                 port:libffi
 
-patchfiles      patch-configure-workaround-bsdsed-incompatibility.diff \
-                patch-configure-disable-docs.diff \
-                patch-unix_lib_osx_sandbox_compatibility.diff
+patchfiles      patch-configure-link-ghc-pwd-against-system-libiconv.diff \
+                buildpath-abi-stability.patch
 
 livecheck.type  none
 test.run        yes
@@ -78,7 +77,7 @@ compiler.blacklist-append \
                 macports-clang-3.3
 
 set bootstraproot ${prefix}/share/ghc-bootstrap
-set llvmPrefix  ${prefix}/libexec/llvm-3.5
+set llvmPrefix  ${prefix}/libexec/llvm-3.7
 configure.args  --with-ghc=${bootstraproot}/bin/ghc \
                 --with-iconv-includes=${prefix}/include \
                 --with-iconv-libraries=${prefix}/lib \
@@ -91,6 +90,16 @@ configure.args  --with-ghc=${bootstraproot}/bin/ghc \
                 --with-llc=${llvmPrefix}/bin/llc \
                 --with-opt=${llvmPrefix}/bin/opt
 
+# See https://ghc.haskell.org/trac/ghc/ticket/11744
+pre-configure {
+    try {
+        set nmclassic [exec -- xcrun --find nm-classic]
+        if {$nmclassic ne ""} {
+            configure.args-append   --with-nm=${nmclassic}
+        }
+    } catch {*} {}
+}
+
 # OK so because the bootstrap binary has been prebuilt for libraries in
 # /usr/lib we search these in addition to MacPorts' paths to prevent link
 # errors. GHC _should_ actually compile itself in stage2 using paths from the
@@ -98,8 +107,10 @@ configure.args  --with-ghc=${bootstraproot}/bin/ghc \
 compiler.cpath /usr/include
 compiler.library_path /usr/lib
 
-build.args      VERBOSE=1
-destroot.args   VERBOSE=1
+pre-configure {
+    file mkdir ${worksrcpath}/build
+    file copy -force ${filespath}/build.mk ${worksrcpath}/build/build.mk
+}
 
 pre-activate {
     set obsoletes [list]

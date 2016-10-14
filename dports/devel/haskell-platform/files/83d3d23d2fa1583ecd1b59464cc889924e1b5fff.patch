@@ -1,0 +1,25 @@
+From 83d3d23d2fa1583ecd1b59464cc889924e1b5fff Mon Sep 17 00:00:00 2001
+From: Herbert Valerio Riedel <hvr@gnu.org>
+Date: Sun, 1 Nov 2015 12:51:32 +0100
+Subject: [PATCH] Relax upper bound on `ghc-prim` to allow v0.5
+
+See https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/changelog.md for what changed
+
+Upstream-Status: Backport [https://github.com/haskell/primitive/commit/83d3d23d2fa1583ecd1b59464cc889924e1b5fff]
+---
+ primitive.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/primitive.cabal b/primitive.cabal
+index 2f35e9e..f034b78 100644
+--- a/primitive.cabal
++++ b/primitive.cabal
+@@ -37,7 +37,7 @@ Library
+         Data.Primitive.Internal.Operations
+ 
+   Build-Depends: base >= 4.3 && < 4.10
+-               , ghc-prim >= 0.2 && < 0.5
++               , ghc-prim >= 0.2 && < 0.6
+                , transformers >= 0.2 && < 0.5
+ 
+   Ghc-Options: -O2 -Wall

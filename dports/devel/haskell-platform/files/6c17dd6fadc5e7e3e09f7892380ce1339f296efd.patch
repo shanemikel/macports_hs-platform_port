@@ -1,0 +1,25 @@
+From 6c17dd6fadc5e7e3e09f7892380ce1339f296efd Mon Sep 17 00:00:00 2001
+From: Herbert Valerio Riedel <hvr@gnu.org>
+Date: Sun, 1 Nov 2015 12:51:30 +0100
+Subject: [PATCH] Relax upper bound on `ghc-prim` to allow v0.5
+
+See https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/changelog.md for what changed
+
+Upstream-Status: Backport [https://github.com/haskell/vector/commit/6c17dd6fadc5e7e3e09f7892380ce1339f296efd]
+---
+ vector.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/vector.cabal b/vector.cabal
+index 3d3b0ff..d962c72 100644
+--- a/vector.cabal
++++ b/vector.cabal
+@@ -140,7 +140,7 @@ Library
+ 
+   Build-Depends: base >= 4.3 && < 4.10
+                , primitive >= 0.5.0.1 && < 0.7
+-               , ghc-prim >= 0.2 && < 0.5
++               , ghc-prim >= 0.2 && < 0.6
+                , deepseq >= 1.1 && < 1.5
+ 
+   Ghc-Options: -O2 -Wall -fno-warn-orphans
