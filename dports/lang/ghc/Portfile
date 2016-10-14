@@ -56,7 +56,8 @@ depends_lib     port:gmp \
                 port:libffi
 
 patchfiles      patch-configure-link-ghc-pwd-against-system-libiconv.diff \
-                buildpath-abi-stability.patch
+                buildpath-abi-stability.patch \
+                fix-GetTime.c-on-Darwin-with-clock_gettime.patch
 
 livecheck.type  none
 test.run        yes
