@@ -1,0 +1,7 @@
+flags: {}
+extra-package-dbs: []
+packages:
+- '.'
+system-ghc: true
+extra-deps: []
+resolver: lts-7.3
